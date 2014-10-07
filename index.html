@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="canonical" href="http://scotrad.io/">
+	<title>Scot Radio</title>
+	<style>
+		body {background-color:#1a98d4;text-align:center;color:white;font-family:Helvetica, Arial, sans-serif;padding-top:50px;overflow-x: hidden;}
+		img {display: block;margin: 0 auto;max-width: 936px;width: 100%;}
+		p {font-size:1.2em;width: 95%;margin: 10px auto;}
+		.radiobutton2 {margin:10px 0 20px;display:inline-block;}
+		.home2 {display: inline-block;height: 150px;width: 150px;}
+		#nostream {visibility: hidden;display: block;width: 95%;margin: 0 auto;}
+		a {display: block;}
+	</style>
+</head>
+<body>
+	<img src="/scotradiologo.jpg" alt=logo>
+	<p>Listen to the stream:</p>
+	<audio src="http://test.emersonveenstra.net:8000/live" controls onerror="nostream()"></audio>
+	<a href="http://blogs.gordon.edu/scotradio/"><img src="home2.png" class="home2" alt="go to the blog"></a>
+	<script>
+  	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-54847506-1', 'auto');ga('send', 'pageview');
+	</script>
+	<script>
+		function nostream() {document.getElementById('nostream').style.visibility = 'visible';document.querySelector('audio').style.display = 'none';}
+	</script>
+</body>
+</html>
