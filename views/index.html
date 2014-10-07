@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="canonical" href="http://scotrad.io/">
+	<link rel="stylesheet" href="/main.css">
+	<title>Scot Radio</title>
+</head>
+<body>
+	<img src="/scotradiologo.jpg" alt="logo">
+	<p>Listen to the stream:</p>
+	<audio src="http://stream.scotrad.io:8000/live" controls onerror="nostream()"></audio>
+	<span class="nostream">The stream is currently offline. Check back later!</span>
+	<p class="now-playing">{{ showInfo }}</p>
+	<a href="http://blogs.gordon.edu/scotradio/"><img src="/home2.png" class="home2" alt="go to the blog"></a>
+<script src="/script.js" async></script>
+</body>
+</html>

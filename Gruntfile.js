@@ -17,7 +17,7 @@ module.exports = function(grunt) {
         cssmin: {
             dist: {
                 files: {
-                    'assets/main.css': 'src/css/main.css'
+                    'public/main.css': 'src/css/main.css'
                 }
             }
         },
@@ -27,14 +27,14 @@ module.exports = function(grunt) {
                     expand: true,                  // Enable dynamic expansion
                     cwd: 'src/imgs',                   // Src matches are relative to this path
                     src: ['*.{png,jpg,gif}'],   // Actual patterns to match
-                    dest: 'assets'                  // Destination path prefix
+                    dest: 'public'                  // Destination path prefix
                 }]
             }
         },
         uglify: {
             dist: {
                 files: {
-                    'assets/script.js': ['src/js/*.js']
+                    'public/script.js': ['node_modules/socket.io/node_modules/socket.io-client/socket.io.js', 'src/js/*.js']
                 }
             }
         }
