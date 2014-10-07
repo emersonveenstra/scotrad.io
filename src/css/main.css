@@ -3,7 +3,7 @@ body {
 	text-align:center;
 	color:white;
 	font-family:Helvetica, Arial, sans-serif;
-	padding-top:50px;
+	padding-top:30px;
 	overflow-x: hidden;
 }
 
@@ -21,8 +21,8 @@ p {
 }
 
 .radiobutton2 {
-	margin:10px 0 20px; 
-	display:inline-block; 
+	margin:10px 0 20px;
+	display:inline-block;
 }
 
 .home2 {
@@ -31,14 +31,13 @@ p {
 	width: 150px;
 }
 
-a {
-	display: block;
-	margin: 0 auto;
-}
-
 #nostream {
 	visibility: hidden;
 	display: block;
 	width: 95%;
 	margin: 0 auto;
+}
+
+a {
+	display: block;
 }
