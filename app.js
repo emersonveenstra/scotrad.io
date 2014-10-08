@@ -37,6 +37,6 @@ io.on('connection', function(socket){
   console.log('a user connected');
 });
 
-app.listen(3003, function() {
+http.listen(3003, function() {
     console.log('Listening on port 3003');
 });
