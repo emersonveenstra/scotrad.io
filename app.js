@@ -6,6 +6,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var scheduler = require('node-schedule');
+var shows = require('./lib/shows');
 
 
 // all environments
