@@ -12,14 +12,24 @@ var shows = require('./lib/shows');
 // all environments
 app.use(express.static(__dirname + '/public'));
 app.set('views', path.join(__dirname, 'views'));
+
+//We're using handlebars inside the HTML files
 app.engine('html', engines.handlebars);
 app.set('view engine', 'html');
+
+//I always hated this thing
 app.disable('x-powered-by');
 
+//Main stream page
 app.get('/', routes.home);
+
+//Future API?
 //app.post('/streaminfo', routes.streaminfo);
+
+//Future show archives page
 //app.get('/archives', routes.archives);
 
+//Using node-schedule to auto-update the page
 var timer = new scheduler.RecurrenceRule();
 timer.dayOfWeek = [1, 2, 3, 4, 5];
 timer.minute = [1, 31];
@@ -29,14 +39,21 @@ var job = scheduler.scheduleJob(timer, function() {
     var hour = new Date().getUTCHours();
     var min = new Date().getMinutes();
     var day = new Date().getUTCDay();
+
+    //For now, it emits even if the show is the same.
+    //Maybe check if a show is the same, but not really important
     var info = shows.getCurrentShow(hour, min, day);
     io.emit('new show', info);
-})
+});
 
-io.on('connection', function(socket){
+//We don't need to send anything on connect because we send
+//initial data in the page using hbs
+io.on('connection', function(socket) {
   console.log('a user connected');
 });
 
+// Note that its NOT app.listen, the sockets are listening to
+// http and won't work if express listens via app.listen
 http.listen(3003, function() {
     console.log('Listening on port 3003');
 });
