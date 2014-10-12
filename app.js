@@ -23,11 +23,13 @@ app.disable('x-powered-by');
 //Main stream page
 app.get('/', routes.home);
 
+//Future show archives page
+// app.get('/archives', routes.mainArchives);
+// app.get('/archives/:showname', routes.showArchives);
+// app.get('/archives/:showname/:date', routes.singleShow);
+
 //Future API?
 //app.post('/streaminfo', routes.streaminfo);
-
-//Future show archives page
-//app.get('/archives', routes.archives);
 
 //Using node-schedule to auto-update the page
 var timer = new scheduler.RecurrenceRule();
@@ -44,12 +46,6 @@ var job = scheduler.scheduleJob(timer, function() {
     //Maybe check if a show is the same, but not really important
     var info = shows.getCurrentShow(hour, min, day);
     io.emit('new show', info);
-});
-
-//We don't need to send anything on connect because we send
-//initial data in the page using hbs
-io.on('connection', function(socket) {
-  console.log('a user connected');
 });
 
 // Note that its NOT app.listen, the sockets are listening to
