@@ -3,5 +3,13 @@ scotrad.io
 
 Repo for http://scotrad.io and all subdomains. Uses Express, sockets.io.
 
-If you submit a PR, make sure you follow existing coding style.
-No tests, so don't worry about that.
+###Contributing
+
+If you want to contribute, details are in the CONTRIBUTING.md file.
+We use the standard github fork -> clone -> branch -> PR model.
+
+Any questions, feel free to open an issue or email any of the maintainers
+
+###Maintainers
+
+* (emersonveenstra)[https:/github.com/emersonveenstra]

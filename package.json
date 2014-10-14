@@ -2,7 +2,7 @@
   "name": "scotrad.io",
   "description": "Splash/stream page for Scot Radio",
   "version": "0.0.1",
-  "homepage": "https://github.com/emersonveenstra/scotrad.io",
+  "homepage": "https://github.com/scotradio/scotrad.io",
   "author": {
     "name": "Emerson Veenstra",
     "email": "emerson@emersonveenstra.net",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/emersonveenstra/scotrad.io.git"
+    "url": "git://github.com/scotradio/scotrad.io.git"
   },
   "bugs": {
-    "url": "https://github.com/emersonveenstra/scotrad.io/issues"
+    "url": "https://github.com/scotradio/scotrad.io/issues"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
