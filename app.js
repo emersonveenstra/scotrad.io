@@ -1,55 +1,88 @@
 var express = require('express');
 var engines = require('consolidate');
 var path = require('path');
-var routes = require('./routes/index');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var currentShows = require('./lib/currentShows');
+var routes = require('./routes/index');
 var scheduler = require('node-schedule');
-var shows = require('./lib/shows');
 
+var ScotRadio = module.exports = function() {
+    this.io = io;
+    this.showObjects = currentShows.objects;
+    this.showStamps = currentShows.timestamps;
+    this.customMessageArray = [];
+    //Using node-schedule to auto-update the page
+    this.updateSocketsJob = scheduler.scheduleJob({minute: [0,30]}, this.changeMessage());
+};
 
-// all environments
-app.use(express.static(__dirname + '/public'));
-app.set('views', path.join(__dirname, 'views'));
+ScotRadio.prototype.changeMessage = function() {
+    if (this.customMessageArray.length !== 0) {
+        this.io.emit('change-message', this.customMessageArray.pop());
+    }
+    else {
+        this.io.emit('change-message', this.getCurrentShowObject(false));
+    }
+};
 
-//We're using handlebars inside the HTML files
-app.engine('html', engines.handlebars);
-app.set('view engine', 'html');
+ScotRadio.prototype.getShowObject = function(showID) {
+    if (typeof this.showObjects[showID] !== 'undefined') return this.showObjects[showID];
+    else return false;
+};
 
-//I always hated this thing
-app.disable('x-powered-by');
+ScotRadio.prototype.getCurrentShowObject = function() {
+    var showID = this.getCurrentShowID();
+    console.log(showID);
+    if (typeof this.showObjects[showID] !== 'undefined') return this.showObjects[showID];
+    else return false;
+};
 
-//Main stream page
-app.get('/', routes.home);
+ScotRadio.prototype.getShowID = function(timestamp) {
+    if (typeof this.showStamps[timestamp] !== 'undefined') return this.showStamps[timestamp];
+    else return false;
+};
 
-//Future show archives page
-// app.get('/archives', routes.mainArchives);
-// app.get('/archives/:showname', routes.showArchives);
-// app.get('/archives/:showname/:date', routes.singleShow);
-
-//Future API?
-//app.post('/streaminfo', routes.streaminfo);
-
-//Using node-schedule to auto-update the page
-var timer = new scheduler.RecurrenceRule();
-timer.dayOfWeek = [1, 2, 3, 4, 5];
-timer.minute = [1, 31];
-timer.hour = [20,21,22,23,0,1,2,3];
-
-var job = scheduler.scheduleJob(timer, function() {
-    var hour = new Date().getUTCHours();
+ScotRadio.prototype.getCurrentShowID = function() {
+    var day = new Date().getUTCDay().toString();
+    var hour = new Date().getUTCHours().toString();
     var min = new Date().getMinutes();
-    var day = new Date().getUTCDay();
+    //Round minute to the previous half hour
+    if (min < 30) min = '00';
+    else min = '30';
+    var timestamp = day + hour + min;
+    if (typeof this.showStamps[timestamp] !== 'undefined') return this.showStamps[timestamp];
+    else return 'not-live';
+};
 
-    //For now, it emits even if the show is the same.
-    //Maybe check if a show is the same, but not really important
-    var info = shows.getCurrentShow(hour, min, day);
-    io.emit('new show', info);
-});
+ScotRadio.prototype.startServer = function() {
+    // all environments
+    app.use(express.static(__dirname + '/public'));
+    app.set('views', path.join(__dirname, 'views'));
 
-// Note that its NOT app.listen, the sockets are listening to
-// http and won't work if express listens via app.listen
-http.listen(3003, function() {
-    console.log('Listening on port 3003');
-});
+    //We're using handlebars inside the HTML files
+    app.engine('html', engines.handlebars);
+    app.set('view engine', 'html');
+
+    //I always hated this thing
+    app.disable('x-powered-by');
+
+    //Main stream page
+    app.get('/', routes.mainStream(req, res, this));
+
+    //Future show archives page
+    // app.get('/archives', routes.mainArchives);
+    // app.get('/archives/:showname', routes.showArchives);
+    // app.get('/archives/:showname/:date', routes.singleShow);
+
+    //Future API?
+    //app.post('/streaminfo', routes.streaminfo);
+
+    // Note that its NOT app.listen, the sockets are listening to
+    // http and won't work if express listens via app.listen
+    http.listen(3003, function() {
+        console.log('Listening on port 3003');
+    });
+};
+
+(new ScotRadio()).startServer();
