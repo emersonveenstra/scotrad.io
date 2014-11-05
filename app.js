@@ -17,12 +17,24 @@ var ScotRadio = module.exports = function() {
     this.updateSocketsJob = scheduler.scheduleJob({minute: [0,30]}, this.changeMessage());
 };
 
-ScotRadio.prototype.changeMessage = function() {
-    if (this.customMessageArray.length !== 0) {
-        this.io.emit('change-message', this.customMessageArray.pop());
+ScotRadio.prototype.changeMessage = function(deleteOld) {
+    this.io.emit('change-message', this.getCurrentMessage(deleteOld));
+};
+
+ScotRadio.prototype.addCustomMessage = function(message, overwrite) {
+    this.customMessageArray.push(message);
+    if (overwrite) this.changeMessage(deleteOld);
+};
+
+ScotRadio.prototype.getCurrentMessage = function(deleteOld) {
+    if (!deleteOld && this.customMessageArray.length !== 0) {
+        return this.customMessageArray[this.customMessageArray.length];
+    }
+    else if (deleteOld && this.customMessageArray.length !== 0) {
+        return this.customMessageArray.pop();
     }
     else {
-        this.io.emit('change-message', this.getCurrentShowObject(false));
+        return this.getCurrentShowObject();
     }
 };
 
@@ -33,7 +45,6 @@ ScotRadio.prototype.getShowObject = function(showID) {
 
 ScotRadio.prototype.getCurrentShowObject = function() {
     var showID = this.getCurrentShowID();
-    console.log(showID);
     if (typeof this.showObjects[showID] !== 'undefined') return this.showObjects[showID];
     else return false;
 };
@@ -68,15 +79,22 @@ ScotRadio.prototype.startServer = function() {
     app.disable('x-powered-by');
 
     //Main stream page
-    app.get('/', routes.mainStream(req, res, this));
+    var self = this;
+    app.get('/', function(req, res) {
+        res.render('index.html', self.getCurrentShowObject());
+    });
 
     //Future show archives page
     // app.get('/archives', routes.mainArchives);
     // app.get('/archives/:showname', routes.showArchives);
     // app.get('/archives/:showname/:date', routes.singleShow);
 
-    //Future API?
-    //app.post('/streaminfo', routes.streaminfo);
+    //Admin page
+    app.get('/admin', routes.admin);
+
+    this.io.on('adminUpdateMessage', function(data) {
+            this.addCustomMessage(data, true));
+    });
 
     // Note that its NOT app.listen, the sockets are listening to
     // http and won't work if express listens via app.listen
