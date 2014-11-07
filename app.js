@@ -55,8 +55,8 @@ ScotRadio.prototype.getShowID = function(timestamp) {
 };
 
 ScotRadio.prototype.getCurrentShowID = function() {
-    var day = new Date().getUTCDay().toString();
-    var hour = new Date().getUTCHours().toString();
+    var day = new Date().getDay().toString();
+    var hour = new Date().getHours().toString();
     var min = new Date().getMinutes();
     //Round minute to the previous half hour
     if (min < 30) min = '00';
@@ -93,7 +93,7 @@ ScotRadio.prototype.startServer = function() {
     app.get('/admin', routes.admin);
 
     this.io.on('adminUpdateMessage', function(data) {
-            this.addCustomMessage(data, true));
+            this.addCustomMessage(data, true);
     });
 
     // Note that its NOT app.listen, the sockets are listening to
