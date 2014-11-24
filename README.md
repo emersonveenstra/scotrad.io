@@ -12,4 +12,4 @@ Any questions, feel free to open an issue or email any of the maintainers
 
 ###Maintainers
 
-* [emersonveenstra](https:/github.com/emersonveenstra)
+* [emersonveenstra](https://github.com/emersonveenstra)
