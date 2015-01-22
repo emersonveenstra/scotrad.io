@@ -7,14 +7,19 @@ var io = require('socket.io')(http);
 var currentShows = require('./lib/currentShows');
 var routes = require('./routes/index');
 var scheduler = require('node-schedule');
+var aws = require('aws-sdk');
 
 var ScotRadio = module.exports = function() {
     this.io = io;
     this.showObjects = currentShows.objects;
     this.showStamps = currentShows.timestamps;
     this.customMessageArray = [];
+
     //Using node-schedule to auto-update the page
-    this.updateSocketsJob = scheduler.scheduleJob({minute: [0,30]}, this.changeMessage());
+    this.updateSocketsJob = scheduler.scheduleJob({minute: [0,30]}, this.changeMessage(true));
+
+    //Get the list of everything on S3
+    this.s3 = new aws.S3({params: {Bucket: 'scot-radio-archives'}});
 };
 
 ScotRadio.prototype.changeMessage = function(deleteOld) {
@@ -85,16 +90,17 @@ ScotRadio.prototype.startServer = function() {
     });
 
     //Future show archives page
-    // app.get('/archives', routes.mainArchives);
+    app.get('/archives', routes.mainArchive);
     // app.get('/archives/:showname', routes.showArchives);
     // app.get('/archives/:showname/:date', routes.singleShow);
 
     //Admin page
-    app.get('/admin', routes.admin);
+    //app.get('/admin', routes.admin);
 
-    this.io.on('adminUpdateMessage', function(data) {
-            this.addCustomMessage(data, true);
-    });
+    //this.io.on('adminUpdateMessage', function(data) {
+    //        this.addCustomMessage(data, true);
+    //        console.log('got message');
+    //});
 
     // Note that its NOT app.listen, the sockets are listening to
     // http and won't work if express listens via app.listen
