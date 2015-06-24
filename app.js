@@ -16,7 +16,8 @@ var ScotRadio = module.exports = function() {
     this.customMessageArray = [];
 
     //Using node-schedule to auto-update the page
-    this.updateSocketsJob = scheduler.scheduleJob({minute: [0,30]}, this.changeMessage(true));
+    //Disabling for now since it causes errors
+    //this.updateSocketsJob = scheduler.scheduleJob({minute: [0,30]}, this.changeMessage(true));
 
     //Get the list of everything on S3
     this.s3 = new aws.S3({params: {Bucket: 'scot-radio-archives'}});
