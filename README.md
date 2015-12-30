@@ -1,15 +1,15 @@
 scotrad.io
 ==========
 
-Repo for http://scotrad.io. Uses Express, sockets.io.
+I am no longer involved with Scot Radio, and so I will not be maintaining this
+any more. This branch is now a static site for ease of hosting. The node-version
+branch contains all the work I did on some advanced functionality that was never
+completed, but will be a good starting point for anyone who wants to continue
+this.
 
-###Contributing
+If you want to pick this up, please email me or open an issue and I will add you
+to the group.
 
-If you want to contribute, details are in the CONTRIBUTING.md file.
-We use the standard github fork -> clone -> branch -> PR model.
-
-Any questions, feel free to open an issue or email any of the maintainers
-
-###Maintainers
+###Former Maintainer
 
 * [emersonveenstra](https://github.com/emersonveenstra)
